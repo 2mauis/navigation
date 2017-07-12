@@ -1,24 +1,6 @@
-/*
- *  Copyright (c) 2008, Willow Garage, Inc.
- *  All rights reserved.
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- */
-
-/* Author: Brian Gerkey */
+// reading guide
+// entry: main class --> core func
+// class init --> main
 
 #include <algorithm>
 #include <vector>
@@ -107,6 +89,7 @@ angle_diff(double a, double b)
 
 static const std::string scan_topic_ = "scan";
 
+//entry main class
 class AmclNode
 {
   public:
@@ -143,6 +126,8 @@ class AmclNode
 #if NEW_UNIFORM_SAMPLING
     static std::vector<std::pair<int,int> > free_space_indices;
 #endif
+
+    // core func
     // Callbacks
     bool globalLocalizationCallback(std_srvs::Empty::Request& req,
                                     std_srvs::Empty::Response& res);
@@ -150,6 +135,7 @@ class AmclNode
                                     std_srvs::Empty::Response& res);
     bool setMapCallback(nav_msgs::SetMap::Request& req,
                         nav_msgs::SetMap::Response& res);
+    void reconfigureCB(amcl::AMCLConfig &config, uint32_t level);
 
     void laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan);
     void initialPoseReceived(const geometry_msgs::PoseWithCovarianceStampedConstPtr& msg);
@@ -163,6 +149,12 @@ class AmclNode
     void applyInitialPose();
 
     double getYaw(tf::Pose& t);
+    void requestMap();
+
+    // Helper to get odometric pose from transform system
+    bool getOdomPose(tf::Stamped<tf::Pose>& pose,
+                     double& x, double& y, double& yaw,
+                     const ros::Time& t, const std::string& f);
 
     //parameter for what odom to use
     std::string odom_frame_id_;
@@ -189,6 +181,8 @@ class AmclNode
     double resolution;
 
     message_filters::Subscriber<sensor_msgs::LaserScan>* laser_scan_sub_;
+    
+    //??? what's messageFilter
     tf::MessageFilter<sensor_msgs::LaserScan>* laser_scan_filter_;
     ros::Subscriber initial_pose_sub_;
     std::vector< AMCLLaser* > lasers_;
@@ -218,12 +212,7 @@ class AmclNode
     // For slowing play-back when reading directly from a bag file
     ros::WallDuration bag_scan_period_;
 
-    void requestMap();
 
-    // Helper to get odometric pose from transform system
-    bool getOdomPose(tf::Stamped<tf::Pose>& pose,
-                     double& x, double& y, double& yaw,
-                     const ros::Time& t, const std::string& f);
 
     //time for tolerance on the published transform,
     //basically defines how long a map->odom transform is good for
@@ -262,7 +251,7 @@ class AmclNode
     laser_model_t laser_model_type_;
     bool tf_broadcast_;
 
-    void reconfigureCB(amcl::AMCLConfig &config, uint32_t level);
+    
 
     ros::Time last_laser_received_ts_;
     ros::Duration laser_check_interval_;
@@ -311,6 +300,7 @@ main(int argc, char** argv)
   return(0);
 }
 
+//class init
 AmclNode::AmclNode() :
         sent_first_transform_(false),
         latest_tf_valid_(false),
