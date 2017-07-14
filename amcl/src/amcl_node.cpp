@@ -137,25 +137,41 @@ class AmclNode
                         nav_msgs::SetMap::Response& res);
     void reconfigureCB(amcl::AMCLConfig &config, uint32_t level);
 
+    //so long...
     void laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan);
+    
+    //just call fn below, update pose
     void initialPoseReceived(const geometry_msgs::PoseWithCovarianceStampedConstPtr& msg);
     void handleInitialPoseMessage(const geometry_msgs::PoseWithCovarianceStamped& msg);
+   
+   //use this to subcribe map topic once
     void mapReceived(const nav_msgs::OccupancyGridConstPtr& msg);
 
+    //reset map pf odom laser
     void handleMapMessage(const nav_msgs::OccupancyGrid& msg);
+
+    //delete map pf odom laser
     void freeMapDependentMemory();
+
+    // call once in handleMapMessage
     map_t* convertMap( const nav_msgs::OccupancyGrid& map_msg );
+    
     void updatePoseFromServer();
     void applyInitialPose();
-
     double getYaw(tf::Pose& t);
+
+    //call once in class init
+    // in this fn, call handleMapMessage once
     void requestMap();
+
+
+
 
     // Helper to get odometric pose from transform system
     bool getOdomPose(tf::Stamped<tf::Pose>& pose,
                      double& x, double& y, double& yaw,
                      const ros::Time& t, const std::string& f);
-
+    void checkLaserReceived(const ros::TimerEvent& event);
     //parameter for what odom to use
     std::string odom_frame_id_;
 
@@ -255,7 +271,7 @@ class AmclNode
 
     ros::Time last_laser_received_ts_;
     ros::Duration laser_check_interval_;
-    void checkLaserReceived(const ros::TimerEvent& event);
+
 };
 
 std::vector<std::pair<int,int> > AmclNode::free_space_indices;
