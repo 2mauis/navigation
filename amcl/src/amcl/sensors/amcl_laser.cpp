@@ -139,7 +139,7 @@ bool AMCLLaser::UpdateSensor(pf_t *pf, AMCLSensorData *data)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// Determine the probability for the given pose, which model is better
+// Determine the probability for the given pose
 double AMCLLaser::BeamModel(AMCLLaserData *data, pf_sample_set_t* set)
 {
   AMCLLaser *self;
