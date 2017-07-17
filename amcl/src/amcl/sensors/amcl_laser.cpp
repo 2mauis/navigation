@@ -92,6 +92,7 @@ AMCLLaser::SetModelLikelihoodField(double z_hit,
   this->sigma_hit = sigma_hit;
 
   map_update_cspace(this->map, max_occ_dist);
+  //???
 }
 
 void 
@@ -138,7 +139,7 @@ bool AMCLLaser::UpdateSensor(pf_t *pf, AMCLSensorData *data)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// Determine the probability for the given pose
+// Determine the probability for the given pose, which model is better
 double AMCLLaser::BeamModel(AMCLLaserData *data, pf_sample_set_t* set)
 {
   AMCLLaser *self;

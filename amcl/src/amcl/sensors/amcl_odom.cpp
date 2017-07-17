@@ -36,8 +36,11 @@
 
 using namespace amcl;
 
+
+// restrict z to -pi~pi
+// I think it's quick but inefficient
 static double
-normalize(double z)
+normalize(double z
 {
   return atan2(sin(z),cos(z));
 }
@@ -47,14 +50,16 @@ angle_diff(double a, double b)
   double d1, d2;
   a = normalize(a);
   b = normalize(b);
-  d1 = a-b;
-  d2 = 2*M_PI - fabs(d1);
+  d1 = a-b; // -2pi~2pi
+  d2 = 2*M_PI - fabs(d1); //0~2pi
   if(d1 > 0)
-    d2 *= -1.0;
+    d2 *= -1.0; //-2pi~0
+  //d1 d2 have contrary sign
   if(fabs(d1) < fabs(d2))
     return(d1);
   else
     return(d2);
+    //-pi~pi
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -109,16 +114,17 @@ AMCLOdom::SetModel( odom_model_t type,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Apply the action model
+// Apply the action model, udpate samples
 bool AMCLOdom::UpdateAction(pf_t *pf, AMCLSensorData *data)
 {
   AMCLOdomData *ndata;
   ndata = (AMCLOdomData*) data;
+  //get data, set it to self class
 
   // Compute the new sample poses
   pf_sample_set_t *set;
 
-  set = pf->sets + pf->current_set;
+  set = pf->sets + pf->current_set; // sets[0] or sets[1]
   pf_vector_t old_pose = pf_vector_sub(ndata->pose, ndata->delta);
 
   switch( this->model_type )
@@ -302,7 +308,7 @@ bool AMCLOdom::UpdateAction(pf_t *pf, AMCLSensorData *data)
       sample->pose.v[1] += delta_trans_hat * 
               sin(sample->pose.v[2] + delta_rot1_hat);
       sample->pose.v[2] += delta_rot1_hat + delta_rot2_hat;
-    }
+    } 
   }
   break;
   }

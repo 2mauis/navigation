@@ -1,0 +1,10 @@
+sensor---->odom
+      ---->laser
+sensor class provide interface for all sensors
+typical interfaces: 
+    data, only store a pointer to sensor 
+    sensor func: 
+        updateAction
+odom: updateAction, pf samples x,y,theta is udpated here, following odom with some error
+    it's recommanded to read codes with amcl_odom.png to understand it.
+laser: updateSensor

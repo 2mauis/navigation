@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "pf.c": "cpp"
+        "pf.c": "cpp",
+        "bitset": "cpp",
+        "pf_vector.c": "cpp",
+        "pf_pdf.c": "cpp",
+        "complex": "cpp",
+        "map_range.c": "cpp"
     }
 }
