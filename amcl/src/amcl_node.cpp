@@ -1,5 +1,6 @@
 // reading guide
 // entry: main class --> core func
+// entry: handleMapInitMessage laserReceived
 // class init --> main
 
 #include <algorithm>
@@ -102,7 +103,7 @@ class AmclNode
     void runFromBag(const std::string &in_bag_fn);
 
     int process();
-    void savePoseToServer();
+    void savePoseToServer();//save map pose; map_pose = odom_pose * last_tf
 
   private:
     tf::TransformBroadcaster* tfb_;
@@ -128,26 +129,37 @@ class AmclNode
 #endif
 
     // core func
-    // Callbacks
+    
+    //??? just init pf? diff between pf_init and pf_init_model
     bool globalLocalizationCallback(std_srvs::Empty::Request& req,
                                     std_srvs::Empty::Response& res);
+    //just set force-update true
     bool nomotionUpdateCallback(std_srvs::Empty::Request& req,
                                     std_srvs::Empty::Response& res);
+
+    // handleMapMessege to entry; handleInitialPoseMessage to init pose
     bool setMapCallback(nav_msgs::SetMap::Request& req,
                         nav_msgs::SetMap::Response& res);
+
+    //just as it means, reconfig everything
     void reconfigureCB(amcl::AMCLConfig &config, uint32_t level);
 
-    //so long...
+
+    //so long... key pf calculation is here
+    // key pf entry
     void laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan);
     
     //just call fn below, update pose
     void initialPoseReceived(const geometry_msgs::PoseWithCovarianceStampedConstPtr& msg);
+    // base_frame --tx_odom--> odom_frame
+    // msg.pose --tx_odom--> new_pose --re-initalize--> new pf
     void handleInitialPoseMessage(const geometry_msgs::PoseWithCovarianceStamped& msg);
    
    //use this to subcribe map topic once
     void mapReceived(const nav_msgs::OccupancyGridConstPtr& msg);
 
     //reset map pf odom laser
+    //func key entry
     void handleMapMessage(const nav_msgs::OccupancyGrid& msg);
 
     //delete map pf odom laser
@@ -156,8 +168,9 @@ class AmclNode
     // call once in handleMapMessage
     map_t* convertMap( const nav_msgs::OccupancyGrid& map_msg );
     
-    void updatePoseFromServer();
-    void applyInitialPose();
+    //called in class init and handleMapMessage
+    void updatePoseFromServer(); //init pose: hard-code values or private_nh_.param
+    void applyInitialPose(); // Initialize the filter using a guassian, according to initial_pose_hyp_
     double getYaw(tf::Pose& t);
 
     //call once in class init
@@ -198,7 +211,6 @@ class AmclNode
 
     message_filters::Subscriber<sensor_msgs::LaserScan>* laser_scan_sub_;
     
-    //??? what's messageFilter
     tf::MessageFilter<sensor_msgs::LaserScan>* laser_scan_filter_;
     ros::Subscriber initial_pose_sub_;
     std::vector< AMCLLaser* > lasers_;

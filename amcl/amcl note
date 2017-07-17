@@ -1,3 +1,9 @@
+reading guide:
+    ??? means questions
+    entry means where to read from
+    this note is just for inspiration, comprehensive notes 
+    can be seen before func declaration or start of the files
+
 sensor---->odom
       ---->laser
 sensor class provide interface for all sensors
@@ -8,3 +14,8 @@ typical interfaces:
 odom: updateAction, pf samples x,y,theta is udpated here, following odom with some error
     it's recommanded to read codes with amcl_odom.png to understand it.
 laser: updateSensor
+
+all key pf calculation is done in laserReceived.
+
+to do: read outlook of amcl, details of pf algorithm, and ros fundomental lib, tf etc
+    try to understand laserReceived
