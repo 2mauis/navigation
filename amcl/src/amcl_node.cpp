@@ -1064,19 +1064,19 @@ AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
   int laser_index = -1;
 
   // Do we have the base->base_laser Tx yet?
-  if(frame_to_laser_.find(laser_scan->header.frame_id) == frame_to_laser_.end())
+  if(frame_to_laser_.find(laser_scan->header.frame_id) == frame_to_laser_.end())//can't find, set up lasers_ lasers_update_
   {
     ROS_DEBUG("Setting up laser %d (frame_id=%s)\n", (int)frame_to_laser_.size(), laser_scan->header.frame_id.c_str());
-    lasers_.push_back(new AMCLLaser(*laser_));
+    lasers_.push_back(new AMCLLaser(*laser_));//real laser entity
     lasers_update_.push_back(true);
-    laser_index = frame_to_laser_.size();
+    laser_index = frame_to_laser_.size();//first time = 0;
 
     tf::Stamped<tf::Pose> ident (tf::Transform(tf::createIdentityQuaternion(),
                                              tf::Vector3(0,0,0)),
                                  ros::Time(), laser_scan->header.frame_id);
     tf::Stamped<tf::Pose> laser_pose;
     try
-    {
+    { // transform laser_frame ident to base_frame, saved in laser_pose
       this->tf_->transformPose(base_frame_id_, ident, laser_pose);
     }
     catch(tf::TransformException& e)
@@ -1093,13 +1093,15 @@ AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
     laser_pose_v.v[1] = laser_pose.getOrigin().y();
     // laser mounting angle gets computed later -> set to 0 here!
     laser_pose_v.v[2] = 0;
-    lasers_[laser_index]->SetLaserPose(laser_pose_v);
+    lasers_[laser_index]->SetLaserPose(laser_pose_v);//set laser to base transform
     ROS_DEBUG("Received laser's pose wrt robot: %.3f %.3f %.3f",
               laser_pose_v.v[0],
               laser_pose_v.v[1],
               laser_pose_v.v[2]);
 
-    frame_to_laser_[laser_scan->header.frame_id] = laser_index;
+    frame_to_laser_[laser_scan->header.frame_id] = laser_index;//record laser_scan's frame, mapped to an index
+                                                              // for which lasers stores an entity
+    //don't care creating or replacing
   } else {
     // we have the laser pose, retrieve laser index
     laser_index = frame_to_laser_[laser_scan->header.frame_id];
@@ -1108,7 +1110,8 @@ AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
   // Where was the robot when this scan was taken?
   pf_vector_t pose;
   if(!getOdomPose(latest_odom_pose_, pose.v[0], pose.v[1], pose.v[2],
-                  laser_scan->header.stamp, base_frame_id_))
+                  laser_scan->header.stamp, base_frame_id_)) // odom_frame to base_frame ???
+                                                             // where, odom data is published according to base  
   {
     ROS_ERROR("Couldn't determine robot's pose associated with laser scan");
     return;
@@ -1117,7 +1120,7 @@ AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
 
   pf_vector_t delta = pf_vector_zero();
 
-  if(pf_init_)
+  if(pf_init_) 
   {
     // Compute change in pose
     //delta = pf_vector_coord_sub(pose, pf_odom_pose_);
@@ -1139,7 +1142,7 @@ AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
   }
 
   bool force_publication = false;
-  if(!pf_init_)
+  if(!pf_init_) // set pf_init_ false will enter here
   {
     // Pose at last filter update
     pf_odom_pose_ = pose;
@@ -1277,6 +1280,7 @@ AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
   if(resampled || force_publication)
   {
     // Read out the current hypotheses
+    // find max weight to pub as odom pose
     double max_weight = 0.0;
     int max_weight_hyp = -1;
     std::vector<amcl_hyp_t> hyps;
