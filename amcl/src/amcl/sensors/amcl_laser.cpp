@@ -110,7 +110,7 @@ bool AMCLLaser::UpdateSensor(pf_t *pf, AMCLSensorData *data)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// Determine the probability for the given pose
+// update weight of each sample, calculate total weights
 double AMCLLaser::BeamModel(AMCLLaserData *data, pf_sample_set_t* set)
 {
   AMCLLaser *self;
@@ -150,7 +150,7 @@ double AMCLLaser::BeamModel(AMCLLaserData *data, pf_sample_set_t* set)
       pz = 0.0;
 
       // Part 1: good, but noisy, hit
-      z = obs_range - map_range;
+      z = obs_range - map_range; // z bigger, pz smaller
       pz += self->z_hit * exp(-(z * z) / (2 * self->sigma_hit * self->sigma_hit));
 
       // Part 2: short reading from unexpected obstacle (e.g., a person)
