@@ -130,7 +130,7 @@ class AmclNode
 
     // core func
     
-    //??? just init pf? diff between pf_init and pf_init_model
+    //??? just init pf? diff between pf_init and pf_init_model: ok, latter can specify model of pose generator
     bool globalLocalizationCallback(std_srvs::Empty::Request& req,
                                     std_srvs::Empty::Response& res);
     //just set force-update true
@@ -1056,7 +1056,7 @@ AmclNode::setMapCallback(nav_msgs::SetMap::Request& req,
 void
 AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
 {
-  last_laser_received_ts_ = ros::Time::now();
+  last_laser_received_ts_ = ros::Time::now(); //for check laser received
   if( map_ == NULL ) {
     return;
   }
