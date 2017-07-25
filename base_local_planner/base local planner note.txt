@@ -1,0 +1,29 @@
+interface: 
+    world model: get footprint cost
+    inherited by:
+        costmap_model: check footprint in costmap
+        point_grid: check footprint, but more complex, need to see further
+        voxel_grid: check footprint
+        latter two maintain own obstacle grid, and point_grid has a main???
+    
+    trajectoryCostFunction: scoreTrajectory, and a scale field(used to combine each score func)
+    inherited by:
+        ...
+        ...
+        ...
+
+    trajectorySampleGenerator: hasMoreTrajectories nextTrajectory
+    inherited by:
+    simple_trajectory_generator: for a few steps,select a velocity from all possible velocity,
+        accelerate from current velocity until reaching target velocity.
+        record trajectories of all, to score them later.
+
+    trajectorySearch: findBestTrajectory
+    inherited by:
+    simple_scored_sampling_planner: scoreTrajectory to findBestTrajectory,
+        combine all trajectoryCostFunction 
+
+above is only used in dwa planner.
+In base local planner(trajectory planner (ros)), all is coupled together
+
+three parts: footprint/trajectory cost/trajectory generator and find best.
