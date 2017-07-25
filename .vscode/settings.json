@@ -7,17 +7,7 @@
         "complex": "cpp",
         "map_range.c": "cpp",
         "xlocale": "cpp",
-<<<<<<< HEAD
         "eig3.c": "cpp",
         "cmath": "cpp"
-=======
-        "deque": "cpp",
-        "list": "cpp",
-        "map": "cpp",
-        "vector": "cpp",
-        "xstring": "cpp",
-        "xtree": "cpp",
-        "xiosbase": "cpp"
->>>>>>> 08e68d9a5e25637b3710c2b95e492ba0f521aee2
     }
 }
