@@ -6,6 +6,13 @@
         "pf_pdf.c": "cpp",
         "complex": "cpp",
         "map_range.c": "cpp",
-        "xlocale": "cpp"
+        "xlocale": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "map": "cpp",
+        "vector": "cpp",
+        "xstring": "cpp",
+        "xtree": "cpp",
+        "xiosbase": "cpp"
     }
 }
