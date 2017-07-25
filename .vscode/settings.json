@@ -6,6 +6,8 @@
         "pf_pdf.c": "cpp",
         "complex": "cpp",
         "map_range.c": "cpp",
-        "xlocale": "cpp"
+        "xlocale": "cpp",
+        "eig3.c": "cpp",
+        "cmath": "cpp"
     }
 }

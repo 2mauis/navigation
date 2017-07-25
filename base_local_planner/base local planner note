@@ -1,0 +1,3 @@
+costmap_model: just check if footprint is legal in cost map
+footprint_helper: just get cells coordinate in footprint
+oscillation_cost_function: depress oscillation by scoring -5 to a trajectory
