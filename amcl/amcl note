@@ -30,3 +30,5 @@ but it only publishes the transform between the global frame and the odometry fr
 
 pf cluster??? todo: pf datatype
 pf current_set: only changed in resample func and always used when referred to set.
+
+ok, understand pf, kd-tree is the key.

@@ -8,6 +8,11 @@
         "map_range.c": "cpp",
         "xlocale": "cpp",
         "eig3.c": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "pf_kdtree.c": "cpp",
+        "system_error": "cpp",
+        "pf_draw.c": "cpp",
+        "map.c": "cpp",
+        "map_store.c": "cpp"
     }
 }

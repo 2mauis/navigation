@@ -71,7 +71,7 @@ pf_kdtree_t *pf_kdtree_alloc(int max_size)
 
   self->size[0] = 0.50;
   self->size[1] = 0.50;
-  self->size[2] = (10 * M_PI / 180);
+  self->size[2] = (10 * M_PI / 180); //angle in degree * 10
 
   self->root = NULL;
 
@@ -270,7 +270,7 @@ pf_kdtree_node_t *pf_kdtree_insert_node(pf_kdtree_t *self, pf_kdtree_node_t *par
 
       if (key[node->pivot_dim] < node->pivot_value)
       {
-        node->children[0] = pf_kdtree_insert_node(self, node, NULL, key, value);
+        node->children[0] = pf_kdtree_insert_node(self, node, NULL, key, value);//leaf
         node->children[1] = pf_kdtree_insert_node(self, node, NULL, node->key, node->value);
       }
       else
@@ -414,7 +414,7 @@ void pf_kdtree_cluster_node(pf_kdtree_t *self, pf_kdtree_node_t *node, int depth
   {
     nkey[0] = node->key[0] + (i / 9) - 1;
     nkey[1] = node->key[1] + ((i % 9) / 3) - 1;
-    nkey[2] = node->key[2] + ((i % 9) % 3) - 1;
+    nkey[2] = node->key[2] + ((i % 9) % 3) - 1; // neiborhood
 
     nnode = pf_kdtree_find_node(self, self->root, nkey);
     if (nnode == NULL)
