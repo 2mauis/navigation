@@ -34,7 +34,7 @@ interface:
 above is only used in dwa planner.
 In base local planner(trajectory planner (ros)), all is coupled together
 
-three parts: footprint/trajectory cost/trajectory generator and find best.
+four parts: footprint, trajectory cost, trajectory generator and find best.
 
 mapGrid: std::vector<MapCell> map_ --> mapGrid cost
 mapCell: ordinary coordinate with some extra fields
