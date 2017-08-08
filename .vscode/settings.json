@@ -13,6 +13,7 @@
         "system_error": "cpp",
         "pf_draw.c": "cpp",
         "map.c": "cpp",
-        "map_store.c": "cpp"
+        "map_store.c": "cpp",
+        "xiosbase": "cpp"
     }
 }
