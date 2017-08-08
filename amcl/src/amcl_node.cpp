@@ -1468,6 +1468,8 @@ AmclNode::handleInitialPoseMessage(const geometry_msgs::PoseWithCovarianceStampe
 
   // In case the client sent us a pose estimate in the past, integrate the
   // intervening odometric change.
+
+  //often not used 
   tf::StampedTransform tx_odom;
   try
   {
@@ -1542,3 +1544,4 @@ AmclNode::applyInitialPose()
     initial_pose_hyp_ = NULL;
   }
 }
+

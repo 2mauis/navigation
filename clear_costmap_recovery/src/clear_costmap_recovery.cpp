@@ -108,7 +108,7 @@ void ClearCostmapRecovery::clear(costmap_2d::Costmap2DROS* costmap){
   for (std::vector<boost::shared_ptr<costmap_2d::Layer> >::iterator pluginp = plugins->begin(); pluginp != plugins->end(); ++pluginp) {
     boost::shared_ptr<costmap_2d::Layer> plugin = *pluginp;
     std::string name = plugin->getName();
-    int slash = name.rfind('/');
+    int slash = name.rfind('/'); //find last
     if( slash != std::string::npos ){
         name = name.substr(slash+1);
     }

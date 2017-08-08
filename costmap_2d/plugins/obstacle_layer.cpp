@@ -612,7 +612,7 @@ void ObstacleLayer::updateRaytraceBounds(double ox, double oy, double wx, double
 void ObstacleLayer::reset()
 {
     deactivate();
-    resetMaps();
+    resetMaps(); // call inherited costmap2d resetMaps
     current_ = true;
     activate();
 }

@@ -55,6 +55,7 @@ namespace move_base {
     planner_plan_(NULL), latest_plan_(NULL), controller_plan_(NULL),
     runPlanner_(false), setup_(false), p_freq_change_(false), c_freq_change_(false), new_global_plan_(false) {
 
+    //entry one
     as_ = new MoveBaseActionServer(ros::NodeHandle(), "move_base", boost::bind(&MoveBase::executeCb, this, _1), false);
 
     ros::NodeHandle private_nh("~");
@@ -81,6 +82,10 @@ namespace move_base {
     latest_plan_ = new std::vector<geometry_msgs::PoseStamped>();
     controller_plan_ = new std::vector<geometry_msgs::PoseStamped>();
 
+    // the thread is used to make a global plan
+    // controlled by runPlanner_, a condition varible wake up the thread periodly,
+    // check runPlanner_ than run the following
+    // if runPlanner_, set state to controlling
     //set up the planner's thread
     planner_thread_ = new boost::thread(boost::bind(&MoveBase::planThread, this));
 
@@ -138,6 +143,7 @@ namespace move_base {
     planner_costmap_ros_->start();
     controller_costmap_ros_->start();
 
+    //entry two
     //advertise a service for getting a plan
     make_plan_srv_ = private_nh.advertiseService("make_plan", &MoveBase::planService, this);
 
@@ -151,6 +157,10 @@ namespace move_base {
       controller_costmap_ros_->stop();
     }
 
+    //recoveryBehavior is called in executeCb, once state = clearing
+    //state will set to clearing in three cases:
+    //oscillation, global planner give none, local planner give none
+    //assert oscillation if fail to move a specified distance in given time
     //load any user specified recovery behaviors, and if that fails load the defaults
     if(!loadRecoveryBehaviors(private_nh)){
       loadDefaultRecoveryBehaviors();
