@@ -14,9 +14,6 @@
         "pf_draw.c": "cpp",
         "map.c": "cpp",
         "map_store.c": "cpp",
-<<<<<<< HEAD
-        "xiosbase": "cpp"
-=======
         "array": "cpp",
         "atomic": "cpp",
         "strstream": "cpp",
@@ -61,6 +58,5 @@
         "typeinfo": "cpp",
         "utility": "cpp",
         "*.ipp": "cpp"
->>>>>>> 6b2e4e3bc85b1b91e54aad754030538ba1e41f29
     }
 }
