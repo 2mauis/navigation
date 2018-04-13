@@ -16,10 +16,6 @@ Now it's just a repo for record.
 *   quick change in the scale，因为scale不像pose一样  
     pose有测量保证单步之后是个高斯分布  
     scale也学人家pose，认为是原来的scale发散下  
-    那变化快了就GG，localization丢了  
-
-<object data="./reprot.pdf" type="application/pdf" width="700px" height="700px">
-    <embed src="./reprot.pdf">
-        This browser does not support PDFs. Please download the PDF to view it: <a href="./reprot.pdf">Download PDF</a>.</p>
-    </embed>
-</object>
+    那变化快了localization丢了  
+    
+[report PDF](https://github.com/meiqua/navigation/raw/kinetic-devel/report.pdf)
